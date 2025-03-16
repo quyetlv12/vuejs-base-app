@@ -103,6 +103,21 @@ const router = createRouter({
                     path: '/documentation',
                     name: 'documentation',
                     component: () => import('@/views/pages/Documentation.vue')
+                },
+                {
+                    path: '/auth/user',
+                    name: 'user',
+                    component: () => import('@/views/auth/users/user.vue')
+                },
+                {
+                    path: '/auth/permission',
+                    name: 'permission',
+                    component: () => import('@/views/auth/permissions/permission.vue')
+                },
+                {
+                    path: '/auth/user/add',
+                    name: 'addUser',
+                    component: () => import('@/views/auth/users/addUser.vue')
                 }
             ]
         },

@@ -1,8 +1,16 @@
 <script setup>
 import { useLayout } from '@/layout/composables/layout';
+import { store } from '@/store';
+import { useRouter } from 'vue-router';
 import AppConfigurator from './AppConfigurator.vue';
 
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
+const router = useRouter();
+
+const handleLogout = () => {
+    store.dispatch('logout');
+    router.push('/auth/login');
+};
 </script>
 
 <template>
@@ -68,10 +76,23 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
                         <i class="pi pi-inbox"></i>
                         <span>Messages</span>
                     </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-user"></i>
-                        <span>Profile</span>
-                    </button>
+                    <div class="relative">
+                        <button
+                            type="button"
+                            class="layout-topbar-action"
+                            v-styleclass="{ selector: '@next', enterFromClass: 'hidden', enterActiveClass: 'animate-scalein', leaveToClass: 'hidden', leaveActiveClass: 'animate-fadeout', hideOnOutsideClick: true }"
+                        >
+                            <i class="pi pi-user"></i>
+                            <span>Profile</span>
+                        </button>
+                        <div class="hidden absolute right-0 top-full mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
+                            <div class="py-1">
+                                <router-link to="/profile" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"> View Profile </router-link>
+                                <router-link to="/settings" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"> Settings </router-link>
+                                <button @click="handleLogout" class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Logout</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -9,12 +9,18 @@
     },
     "dependencies": {
         "@primeuix/themes": "^1.0.0",
+        "@tanstack/vue-query": "^5.68.0",
+        "axios": "^1.8.3",
         "chart.js": "3.3.2",
+        "lodash": "^4.17.21",
         "primeicons": "^7.0.0",
         "primevue": "^4.3.1",
         "tailwindcss-primeui": "^0.5.0",
         "vue": "^3.4.34",
-        "vue-router": "^4.4.0"
+        "vue-lodash": "^2.1.2",
+        "vue-router": "^4.4.0",
+        "vuex": "^4.1.0",
+        "yup": "^1.6.1"
     },
     "devDependencies": {
         "@primevue/auto-import-resolver": "^4.3.1",

@@ -9,6 +9,13 @@ const model = ref([
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
     },
     {
+        label: 'Người dùng',
+        items: [
+            { label: 'Tài khoản', icon: 'pi pi-fw pi-user', to: '/auth/user' },
+            { label: 'Phân quyền', icon: 'pi pi-fw pi-check-square', to: '/auth/permission' }
+        ]
+    },
+    {
         label: 'UI Components',
         items: [
             { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
