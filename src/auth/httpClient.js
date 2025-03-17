@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const httpClient = axios.create({
-    baseURL: 'http://103.112.209.174:3000/api',
+    baseURL: 'https://apidemo.toolsdigitel.io.vn/api',
     headers: {
         'Content-Type': 'application/json'
     }
