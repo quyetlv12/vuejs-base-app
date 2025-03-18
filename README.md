@@ -38,7 +38,7 @@ src/
 ├── views/ # chứa các trang của app , ví dụ như phần user, role
 ├── router/ # Thư mục chứa các file liên quan đến router , ví dụ khi click vào các nút sẽ chuyển hướng đến trang nào thì phải được định nghĩa ở đây
 ├── service/ # Thư mục chứa các file liên quan đến service dùng để xứ lý thao tác với API ví dụ như get, post, put, delete
-├── utils/ # Thư mục chứa các file liên quan đến utils
+├── utils/ # dùng để viết các hàm dùng chung , tái sử dụng hàm thay vì phải viết lại nhiều lần
 ├── App.vue # file chính của app
 ├── main.js # dùng để sử dụng các plugin, middleware, router, store, component, ...
 ├── router/ # chứa các route của project

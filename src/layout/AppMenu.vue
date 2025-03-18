@@ -1,15 +1,11 @@
 <script setup>
+import { hasPermission } from '@/utils';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import AppMenuItem from './AppMenuItem.vue';
 const store = useStore();
 const user = computed(() => store.state.user);
 const permissions = computed(() => user.value.permission);
-const hasPermission = (requiredPermission) => {
-    if (!requiredPermission) return true;
-    return permissions.value.includes(requiredPermission);
-};
-
 const model = ref([
     {
         label: 'Home',
@@ -158,10 +154,10 @@ const model = ref([
         <template v-for="(item, i) in model" :key="item">
             <template v-if="!item.separator">
                 <app-menu-item
-                    v-if="item.items.some((subItem) => hasPermission(subItem.permission))"
+                    v-if="item.items.some((subItem) => hasPermission(subItem.permission, permissions))"
                     :item="{
                         ...item,
-                        items: item.items.filter((subItem) => hasPermission(subItem.permission))
+                        items: item.items.filter((subItem) => hasPermission(subItem.permission, permissions))
                     }"
                     :index="i"
                 />
