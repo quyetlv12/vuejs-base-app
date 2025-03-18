@@ -3,7 +3,7 @@
 1. Clone project
 
 ```bash
-git clone https://github.com/quyetnguyen2309/sakai-admin.git
+git clone https://github.com/quyetlv12/vuejs-base-app
 ```
 
 2. Install dependencies
