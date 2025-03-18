@@ -138,6 +138,11 @@ const router = createRouter({
                     path: '/auth/roles',
                     name: 'roles',
                     component: () => import('@/views/auth/roles/role.vue')
+                },
+                {
+                    path: '/auth/profile',
+                    name: 'profile',
+                    component: () => import('@/views/pages/auth/profile.vue')
                 }
             ]
         },

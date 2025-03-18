@@ -2,6 +2,7 @@
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 import { login } from '@/service/auth';
 import { useMutation } from '@tanstack/vue-query';
+import { useToast } from 'primevue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -12,6 +13,8 @@ const checked = ref(false);
 
 const router = useRouter();
 const store = useStore();
+
+const toast = useToast();
 
 const { mutate, isPending } = useMutation({
     mutationFn: () => login(username.value, password.value),
@@ -24,6 +27,11 @@ const { mutate, isPending } = useMutation({
             role: data.data.role
         };
         store.dispatch('setUserData', { user: userData, token: data.data.token });
+        toast.add({
+            severity: 'success',
+            summary: 'Thành công',
+            detail: 'Tạo vai trò thành công'
+        });
         router.push('/');
     },
     onError: (error) => {
