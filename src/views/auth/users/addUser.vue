@@ -1,4 +1,5 @@
 <script setup>
+import router from '@/router';
 import { createUser } from '@/service/userService';
 import { useMutation } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
@@ -12,7 +13,7 @@ const formData = ref({
     confirmPassword: '', // Added confirm password field
     status: 1,
     profile_photo_path: '',
-    roles_id: [2],
+    roles_id: [1],
     status_two_factor: 0
 });
 
@@ -24,7 +25,7 @@ const formErrors = ref({
     confirmPassword: ''
 });
 
-const createUserMutation = useMutation({
+const { mutate, isPending } = useMutation({
     mutationFn: createUser,
     onSuccess: () => {
         router.push('/users');
@@ -104,10 +105,15 @@ const handleCreateUser = async () => {
         name: formData.value.name,
         username: formData.value.username,
         email: formData.value.email,
-        password: formData.value.password
+        password: formData.value.password,
+        roles_id: formData.value.roles_id,
+        status: formData.value.status,
+        status_two_factor: formData.value.status_two_factor,
+        profile_photo_path: formData.value.profile_photo_path,
+        phone: formData.value.phone
     };
     console.log('data', data);
-
+    mutate(data);
     // createUserMutation.mutateAsync(data);
 };
 </script>
@@ -115,8 +121,14 @@ const handleCreateUser = async () => {
 <template>
     <Fluid>
         <div class="card">
-            <h2 class="text-2xl font-bold mb-6">Add New User</h2>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Add New User</h2>
+                <div class="flex gap-2">
+                    <Button label="Back" icon="pi pi-arrow-left" class="p-button-outlined p-button-secondary" @click="$router.back()" />
+                </div>
+            </div>
 
+            <Divider align="left">User Information</Divider>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="flex flex-col gap-2">
                     <label for="name">Full Name</label>
@@ -177,7 +189,7 @@ const handleCreateUser = async () => {
 
             <div class="flex justify-end mt-6 gap-2">
                 <!-- <Button label="Cancel" severity="secondary" text /> -->
-                <Button label="Tạo người dùng" :disabled="!passwordsMatch && formData.confirmPassword" @click="handleCreateUser" />
+                <Button label="Tạo người dùng" :disabled="!passwordsMatch && formData.confirmPassword" @click="handleCreateUser" :loading="isPending" class="w-full" />
             </div>
         </div>
     </Fluid>
