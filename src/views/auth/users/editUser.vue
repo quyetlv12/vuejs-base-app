@@ -1,12 +1,13 @@
 <script setup>
-import { createUser, getRoles } from '@/service/userService';
+import { getRoles, getUser, updateUser } from '@/service/userService';
 import { useMutation } from '@tanstack/vue-query';
 import { useToast } from 'primevue';
 import { computed, ref, watchEffect } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const toast = useToast();
 const router = useRouter();
+const route = useRoute();
 const roles = ref([]);
 const formData = ref({
     name: '',
@@ -15,7 +16,7 @@ const formData = ref({
     email: '',
     password: '',
     confirmPassword: '',
-    status: 1,
+    status: '',
     profile_photo_path: '',
     roles_id: '',
     status_two_factor: 0
@@ -24,18 +25,16 @@ const formData = ref({
 const formErrors = ref({
     name: '',
     username: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
+    email: ''
 });
 
 const { mutate, isPending } = useMutation({
-    mutationFn: createUser,
+    mutationFn: (data) => updateUser(route.query.id, data),
     onSuccess: () => {
         toast.add({
             severity: 'success',
             summary: 'Thành công',
-            detail: 'Tạo người dùng thành công',
+            detail: 'Cập nhật người dùng thành công',
             life: 3000
         });
         router.push('/auth/user');
@@ -122,38 +121,26 @@ const validateForm = () => {
         isValid = false;
     }
 
-    if (!formData.value.password) {
-        formErrors.value.password = 'Password is required';
-        isValid = false;
-    }
-
     if (!formData.value.phone) {
         formErrors.value.phone = 'Phone is required';
-        isValid = false;
-    }
-
-    if (!formData.value.confirmPassword) {
-        formErrors.value.confirmPassword = 'Confirm password is required';
-        isValid = false;
-    } else if (!passwordsMatch.value) {
-        formErrors.value.confirmPassword = 'Passwords do not match';
         isValid = false;
     }
 
     return isValid;
 };
 
-const handleCreateUser = async () => {
+const handleUpdateUser = async () => {
     if (!validateForm()) {
         return;
     }
 
     const data = {
+        id: route.query.id,
         name: formData.value.name,
         username: formData.value.username,
         email: formData.value.email,
         password: formData.value.password,
-        roles_id: formData.value.roles_id,
+        roles_id: [formData.value.roles_id],
         status: formData.value.status,
         status_two_factor: formData.value.status_two_factor,
         profile_photo_path: formData.value.profile_photo_path,
@@ -166,6 +153,24 @@ watchEffect(() => {
     getRoles().then((res) => {
         roles.value = res.data.data;
     });
+
+    if (route.query.id) {
+        getUser(route.query.id).then((res) => {
+            const userData = res.data;
+            formData.value = {
+                name: userData.name,
+                username: userData.username,
+                phone: userData.phone,
+                email: userData.email,
+                password: '',
+                confirmPassword: '',
+                status: userData.status,
+                profile_photo_path: userData.profile_photo_path,
+                roles_id: userData.roles_id[0],
+                status_two_factor: userData.status_two_factor
+            };
+        });
+    }
 });
 </script>
 
@@ -173,7 +178,7 @@ watchEffect(() => {
     <Fluid>
         <div class="card">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Add New User</h2>
+                <h2 class="text-2xl font-bold">Edit User</h2>
                 <div class="flex gap-2">
                     <Button label="Back" icon="pi pi-arrow-left" class="p-button-outlined p-button-secondary" @click="$router.back()" />
                 </div>
@@ -205,7 +210,7 @@ watchEffect(() => {
                     <small class="text-red-500" v-if="formErrors.phone">{{ formErrors.phone }}</small>
                 </div>
 
-                <div class="flex flex-col gap-2">
+                <!-- <div class="flex flex-col gap-2">
                     <label for="password">Password</label>
                     <Password id="password" v-model="formData.password" toggleMask :class="{ 'p-invalid': formErrors.password }" />
                     <small class="text-red-500" v-if="formErrors.password">{{ formErrors.password }}</small>
@@ -215,7 +220,7 @@ watchEffect(() => {
                     <label for="confirmPassword">Confirm Password</label>
                     <Password id="confirmPassword" v-model="formData.confirmPassword" toggleMask :class="{ 'p-invalid': formErrors.confirmPassword }" />
                     <small class="text-red-500" v-if="formErrors.confirmPassword">{{ formErrors.confirmPassword }}</small>
-                </div>
+                </div> -->
 
                 <div class="flex flex-col gap-2">
                     <label for="status">Status</label>
@@ -240,7 +245,7 @@ watchEffect(() => {
 
             <div class="flex justify-end mt-6 gap-2">
                 <!-- <Button label="Cancel" severity="secondary" text /> -->
-                <Button label="Tạo người dùng" :disabled="!passwordsMatch && formData.confirmPassword" @click="handleCreateUser" :loading="isPending" class="w-full" />
+                <Button label="Cập nhật" :disabled="!passwordsMatch && formData.confirmPassword" @click="handleUpdateUser" :loading="isPending" class="w-full" />
             </div>
         </div>
     </Fluid>

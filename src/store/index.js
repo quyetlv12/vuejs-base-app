@@ -3,7 +3,7 @@ import { createStore } from 'vuex';
 export const store = createStore({
     state() {
         return {
-            user: null,
+            user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
             token: localStorage.getItem('token') || null
         };
     },

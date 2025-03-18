@@ -118,6 +118,26 @@ const router = createRouter({
                     path: '/auth/user/add',
                     name: 'addUser',
                     component: () => import('@/views/auth/users/addUser.vue')
+                },
+                {
+                    path: '/auth/user/edit',
+                    name: 'editUser',
+                    component: () => import('@/views/auth/users/editUser.vue')
+                },
+                {
+                    path: '/auth/role/add',
+                    name: 'addRole',
+                    component: () => import('@/views/auth/roles/addRole.vue')
+                },
+                {
+                    path: '/auth/role/edit',
+                    name: 'editRole',
+                    component: () => import('@/views/auth/roles/editRole.vue')
+                },
+                {
+                    path: '/auth/roles',
+                    name: 'roles',
+                    component: () => import('@/views/auth/roles/role.vue')
                 }
             ]
         },

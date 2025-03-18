@@ -1,5 +1,5 @@
 <script setup>
-import { deleteUser, getUsers } from '@/service/userService';
+import { deleteRole, getRoles } from '@/service/userService';
 import { useMutation } from '@tanstack/vue-query';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
@@ -22,7 +22,7 @@ const tableConfig = ref({
 const loadUsers = async () => {
     try {
         isLoading.value = true;
-        const res = await getUsers({
+        const res = await getRoles({
             page: tableConfig.value.page,
             per_page: tableConfig.value.per_page
         });
@@ -53,13 +53,13 @@ const onPage = (event) => {
     loadUsers();
 };
 
-const addUser = () => {
-    router.push('/auth/user/add');
+const addRole = () => {
+    router.push('/auth/role/add');
 };
 
 const editUser = (user) => {
     router.push({
-        path: '/auth/user/edit',
+        path: '/auth/role/edit',
         query: {
             id: user.id
         }
@@ -68,13 +68,13 @@ const editUser = (user) => {
 
 // Delete user mutation
 const deleteUserMutation = useMutation({
-    mutationFn: deleteUser,
+    mutationFn: deleteRole,
     onSuccess: () => {
         loadUsers();
         toast.add({
             severity: 'success',
             summary: 'Thành công',
-            detail: 'Đã xóa người dùng',
+            detail: 'Đã xóa vai trò',
             life: 3000
         });
     },
@@ -82,7 +82,7 @@ const deleteUserMutation = useMutation({
         toast.add({
             severity: 'error',
             summary: 'Lỗi',
-            detail: 'Không thể xóa người dùng'
+            detail: 'Không thể xóa vai trò'
         });
     }
 });
@@ -107,9 +107,9 @@ const handleDeleteUser = (user) => {
         <div class="col-12">
             <div class="card">
                 <div class="flex justify-between items-center mb-4">
-                    <div class="font-semibold text-2xl">Tài khoản</div>
+                    <div class="font-semibold text-2xl">Vai trò</div>
 
-                    <Button label="Thêm tài khoản" icon="pi pi-plus" severity="success" @click="addUser" />
+                    <Button label="Thêm vai trò" icon="pi pi-plus" severity="success" @click="addRole" />
                 </div>
                 <DataTable
                     :value="users"
@@ -124,15 +124,8 @@ const handleDeleteUser = (user) => {
                     currentPageReportTemplate="Hiển thị {first} đến {last} của {totalRecords} bản ghi"
                     :rowsPerPageOptions="[2, 5, 10, 20]"
                 >
-                    <Column field="id" header="Mã tài khoản" sortable class="text-center"></Column>
-                    <Column field="username" header="Tên tài khoản" sortable class="text-center"></Column>
-                    <Column field="email" header="Email" sortable class="text-center"></Column>
-                    <Column field="role" header="Quyền" sortable class="text-center"></Column>
-                    <Column field="status" header="Trạng thái" sortable class="text-center">
-                        <template #body="slotProps">
-                            <Tag :value="slotProps.data.status === 1 ? 'Hoạt động' : 'Không hoạt động'" :severity="slotProps.data.status === 1 ? 'success' : 'danger'" />
-                        </template>
-                    </Column>
+                    <Column field="id" header="Mã vai trò" sortable class="text-center"></Column>
+                    <Column field="name" header="Tên vai trò" sortable class="text-center"></Column>
                     <Column :exportable="false" style="min-width: 8rem" class="text-center">
                         <template #body="slotProps">
                             <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" @click="editUser(slotProps.data)" :hidden="slotProps.data.id === 1" />
